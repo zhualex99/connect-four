@@ -57,7 +57,12 @@ public class Board {
     
         return newMask;
     } 
-
+    /**
+     * Returns true if the space in unoccupied by an existing piece and returns false if the space on the board is already occupied.
+     * @param col   the column that you wish to play in
+     * @param mask  the binary mask of the two players
+     * @return      returns whether or not the player can play in this col
+     */
     public boolean canPlay(int col, long mask){
         //System.out.println(Long.toBinaryString((long)Math.pow(2,col*7)<<5));
         return (((long)(Math.pow(2,(col*7)))<<5 & mask)==0);
