@@ -91,7 +91,7 @@ public class Main implements MouseListener {
         try{
         mask = playerTurn? player.makeMove(mouseCol, mask, ai) : ai.makeMove(mouseCol, mask, player);
         
-        System.out.print("Mask: ");
+        
         Board.printBits(mask);
         System.out.print("Yellow: ");
         Board.printBits(player.getPos());

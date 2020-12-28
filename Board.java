@@ -8,7 +8,7 @@ public class Board {
      */
     public static void printBits(long pos){
         String bits = Long.toBinaryString(pos);
-        System.out.println("Start: "+ bits);
+        System.out.println(bits);
         
         char[][] b = new char [7][7];
         for(int i = 0; i < 7; i++){
@@ -43,14 +43,25 @@ public class Board {
     public long makeMove(int col, long mask, Board opp) throws ExitException{
         //System.out.println(Long.toBinaryString(mask));
         //opp.setBoard(pos^mask);
+        
+        
         long newMask =  mask | (long)(mask + (Math.pow(2,(col*7))));
         pos = opp.getPos()^newMask;
-        checkState();
+        int result = checkState();
+        System.out.println(canPlay(col, mask));
         
+        if (result >=0){
+            throw new ExitException(result);
+        }
+    
+    
         return newMask;
     } 
 
-    
+    public boolean canPlay(int col, long mask){
+        //System.out.println(Long.toBinaryString((long)Math.pow(2,col*7)<<5));
+        return (((long)(Math.pow(2,(col*7)))<<5 & mask)==0);
+    }
     /**
      * setter for the board position
      * @param position  the position of the player
@@ -71,30 +82,31 @@ public class Board {
      * checks if there is a result on the board
      * @throws ExitException thrown when a result is on the board (win/loss/draw)
      */
-    private void checkState() throws ExitException{
+    private int checkState(){
         //TODO: add draw case
         long m = pos & (pos >> 7);
         System.out.println("Here" + (m& (m >> 14)));
         if ((m & (m >> 14)) > 0){
             
-            throw new ExitException(ExitException.WIN);
+            return 1;
         }
 
         m = pos & (pos >> 6);
         if ((m & (m >> 12))>0){
-            throw new ExitException(ExitException.WIN);
+            return 1;
         }
 
         m = pos & (pos >> 8);
         if ((m & (m >> 16))>0){
-            throw new ExitException(ExitException.WIN);
+            return 1;
         }
 
         m = pos & (pos >> 1);
         if ((m & (m >> 2))>0){
-            throw new ExitException(ExitException.WIN);
+            return 1;
         }
         
+        return -1;
         
     }
     
