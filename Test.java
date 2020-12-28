@@ -67,6 +67,35 @@ public static int evaluatePosition (int [][] board){
         }
     }
 }
+//check for diagonal 3 in a rows
+for (int j = 0; j <= 3; j++){
+    for (int i = 0; i <= 4; i++){
+        if (board[i][j] > 0 && board[i][j] == board[i+1][j+1] && board[i+1][j+1] == board[i+2][j+2]){
+            if (i > 0 && j> 0 && board[i-1][j-1] == 0){
+                if (board[i][j] == 1) {
+                    score = score + 10;
+                }
+                else {
+                    score = score - 10;
+                }
+            }
+            else if (i <= 3 && j <= 2 && board[i+3][j+3] == 0){
+                if (board[i][j] == 1) {
+                    score = score + 10;
+                }
+                else {
+                    score = score - 10;
+                }
+            }
+            else{
+                 score = score;
+            }
+        }
+        else{
+            score = score;
+    }
+}
+}
     
     //check for vertical 2 in a row
     for (int i = 0; i <= 6; i++){
@@ -74,18 +103,18 @@ public static int evaluatePosition (int [][] board){
             if (board[i][j] > 0 && board[i][j] == board[i][j+1]){
                 if (j > 0 && board[i][j-1] == 0){
                     if (board[i][j] == 1) {
-                        score = score + 10;
+                        score = score + 5;
                     }
                     else {
-                        score = score - 10;
+                        score = score - 5;
                     }
                 }
                 else if (j <= 3 && board[i][j+2] == 0){
                     if (board[i][j] == 1) {
-                        score = score + 10;
+                        score = score + 5;
                     }
                     else {
-                        score = score - 10;
+                        score = score - 5;
                     }
                 }
                 else{
@@ -103,18 +132,47 @@ public static int evaluatePosition (int [][] board){
             if (board[i][j] > 0 && board[i][j] == board[i+1][j]){
                 if (i > 0 && board[i-1][j] == 0){
                     if (board[i][j] == 1) {
-                        score = score + 10;
+                        score = score + 5;
                     }
                     else {
-                        score = score - 10;
+                        score = score - 5;
                     }
                 }
                 else if (i <= 4 && board[i+2][j] == 0){
                     if (board[i][j] == 1) {
-                        score = score + 10;
+                        score = score + 5;
                     }
                     else {
-                        score = score - 10;
+                        score = score - 5;
+                    }
+                }
+                else{
+                     score = score;
+                }
+            }
+            else{
+                score = score;
+        }
+    }
+}
+    //check for diagonal 2 in a row
+    for (int i = 0; i <= 5; i++){
+        for (int j = 0; j <= 4; j++){
+            if (board[i][j] > 0 && board[i][j] == board[i+1][j+1]){
+                if (i > 0 && j > 0 && board[i-1][j-1] == 0){
+                    if (board[i][j] == 1) {
+                        score = score + 5;
+                    }
+                    else {
+                        score = score - 5;
+                    }
+                }
+                else if (i <= 4 && j <= 3 && board[i+2][j+2] == 0){
+                    if (board[i][j] == 1) {
+                        score = score + 5;
+                    }
+                    else {
+                        score = score - 5;
                     }
                 }
                 else{
