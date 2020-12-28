@@ -1,5 +1,7 @@
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+
+
 import javax.swing.JComponent;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
@@ -12,8 +14,8 @@ public class Main implements MouseListener {
     public static final int RADIUS = WIDTH/7;
     private int mouseX;
     private int mouseCol;
-    private Board player = new Board();
-    private Board ai = new Board();
+    private long player = 0;
+    private long ai = 0;
     private int[][] board = new int[7][6];
     private long mask = 0;
     private Drawing game = new Drawing();
@@ -70,6 +72,7 @@ public class Main implements MouseListener {
                     }
                 }
             }
+            System.out.println(Test.evaluatePosition(board));
         }
 
     }
@@ -80,7 +83,7 @@ public class Main implements MouseListener {
     public void mousePressed(MouseEvent e) {
         mouseX = e.getX();
         mouseCol = (int)Math.floor((double)mouseX/((double)WIDTH/7));
-        System.out.println(mouseCol);
+        //System.out.println(mouseCol);
         for (int i = 0; i < board[mouseCol].length; i++){
             if (board[mouseCol][i] == 0){
                 board[mouseCol][i] = playerTurn? 1:2;
@@ -89,15 +92,26 @@ public class Main implements MouseListener {
             }
         }
         try{
-        mask = playerTurn? player.makeMove(mouseCol, mask, ai) : ai.makeMove(mouseCol, mask, player);
+        //mask = playerTurn? player.makeMove(mouseCol, mask, ai) : ai.makeMove(mouseCol, mask, player);
+
+        if(playerTurn){
+            long[] newBoard = Board.makeMove(mouseCol, mask, player, ai);
+            player = newBoard[1];
+            mask = newBoard[0];
+        }
+        else{
+            long[] newBoard = Board.makeMove(mouseCol, mask, ai, player);
+            ai = newBoard[1];
+            mask = newBoard[0];
+        }
         
-        
-        Board.printBits(mask);
-        System.out.print("Yellow: ");
-        Board.printBits(player.getPos());
-        System.out.print("Red: ");
-        Board.printBits(ai.getPos());
-        System.out.println();
+        //System.out.println(AI.minimax(ai, player, mask, 3, true));
+        // Board.printBits(mask);
+        // System.out.print("Yellow: ");
+        // Board.printBits(player.getPos());
+        // System.out.print("Red: ");
+        // Board.printBits(ai.getPos());
+        // System.out.println();
         game.repaint();
         }
         catch(ExitException exit){
@@ -108,7 +122,7 @@ public class Main implements MouseListener {
             if(exit.getExitCode() == ExitException.WIN){
                 
                 int n = JOptionPane.showOptionDialog(null, (playerTurn? "Player" : "AI") + " WINS", "Exit Condition Met", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]); 
-                System.out.println(n);
+                //System.out.println(n);
                 if(n == 1){//exit
                     System.exit(0);
                 }

@@ -1,6 +1,6 @@
 
 public class Board {
-    private long pos = 0;
+    //private long pos = 0;
 
     /**
      * prints the binary representation of the player position
@@ -40,22 +40,22 @@ public class Board {
      * @return      the new mask
      * @throws ExitException    thrown when a result has been achieved (win/loss/draw)
      */
-    public long makeMove(int col, long mask, Board opp) throws ExitException{
+    public static long[] makeMove(int col, long mask,long pos, long opp) throws ExitException{
         //System.out.println(Long.toBinaryString(mask));
         //opp.setBoard(pos^mask);
         
         
         long newMask =  mask | (long)(mask + (Math.pow(2,(col*7))));
-        pos = opp.getPos()^newMask;
-        int result = checkState();
-        System.out.println(canPlay(col, mask));
+        pos = opp^newMask;
+        int result = checkState(pos);
+        //System.out.println(canPlay(col, mask));
         
         if (result >=0){
             throw new ExitException(result);
         }
     
     
-        return newMask;
+        return new long[] {newMask, pos};
     } 
     /**
      * Returns true if the space in unoccupied by an existing piece and returns false if the space on the board is already occupied.
@@ -63,7 +63,7 @@ public class Board {
      * @param mask  the binary mask of the two players
      * @return      returns whether or not the player can play in this col
      */
-    public boolean canPlay(int col, long mask){
+    public static boolean canPlay(int col, long mask){
         //System.out.println(Long.toBinaryString((long)Math.pow(2,col*7)<<5));
         return (((long)(Math.pow(2,(col*7)))<<5 & mask)==0);
     }
@@ -72,25 +72,24 @@ public class Board {
      * @param position  the position of the player
      */
     public void setBoard(long position){
-        pos = position;
+        //pos = position;
     }
 
     /**
      * gets the position
      * @return  the position of the player
      */
-    public long getPos (){
-        return pos;
-    }
+    //public long getPos (){
+        //return pos;
+    //}
 
     /**
      * checks if there is a result on the board
-     * @throws ExitException thrown when a result is on the board (win/loss/draw)
      */
-    private int checkState(){
+    public static int checkState(long pos){
         //TODO: add draw case
         long m = pos & (pos >> 7);
-        System.out.println("Here" + (m& (m >> 14)));
+        //System.out.println("Here" + (m& (m >> 14)));
         if ((m & (m >> 14)) > 0){
             
             return 1;
@@ -115,6 +114,6 @@ public class Board {
         
     }
     
-
+    
     
 }
