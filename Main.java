@@ -90,11 +90,13 @@ public class Main implements MouseListener {
                     int[] result = AI.minimax(ai, player, Integer.MIN_VALUE, Integer.MAX_VALUE, mask, DEPTH, true);
                     System.out.println(
                             "That took: " + ((System.currentTimeMillis() - timer) / (double) 1000) + " Seconds");
-                    makeMove(result[1]);
-                    System.out.println("AI Predicted Value: " + result[0]);
+                    
+                    System.out.println("AI Predicted Value: " + (result[0] > 0 && (Integer.MAX_VALUE - result[0] <= 42) ? "AI Win" : 
+                                            (result[0] < 0 && Integer.MIN_VALUE - result[0] <= 42) ? Integer.MIN_VALUE - result[0] : result[0]));
                     System.out.println("AI Move: " + result[1]);
+                    makeMove(result[1]);
                 }
-                System.out.println(mask);
+                
 
                 System.out.println();
             }
