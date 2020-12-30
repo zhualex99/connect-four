@@ -12,6 +12,7 @@ public class Main implements MouseListener {
     private static final int WIDTH = 700;
     private static final int HEIGHT = 600;
     public static final int RADIUS = WIDTH/7;
+    private static final int DEPTH = 10;
     private int mouseX;
     private int mouseCol;
     private long player = 0;
@@ -20,6 +21,9 @@ public class Main implements MouseListener {
     private long mask = 0;
     private Drawing game = new Drawing();
     private boolean playerTurn = false;
+    private long timer = 0;
+    private boolean boardLocked = false;
+    
     
     
 
@@ -72,7 +76,6 @@ public class Main implements MouseListener {
                     }
                 }
             }
-            //System.out.println(Test.evaluatePosition(board));
         }
 
     }
@@ -81,15 +84,22 @@ public class Main implements MouseListener {
 
     @Override
     public void mousePressed(MouseEvent e) {
+        if(boardLocked == false){
+        boardLocked = true;
         mouseX = e.getX();
         mouseCol = (int)Math.floor((double)mouseX/((double)WIDTH/7));
         //System.out.println(mouseCol);
         makeMove(mouseCol);
-        int[] result = AI.minimax(ai, player,Integer.MIN_VALUE, Integer.MAX_VALUE, mask, 10, true);
-        
+        System.out.println("Searching at depth: " + DEPTH + "...");
+        timer = System.currentTimeMillis();
+        int[] result = AI.minimax(ai, player,Integer.MIN_VALUE, Integer.MAX_VALUE, mask, DEPTH, true);
+        System.out.println ("That took: " + ((System.currentTimeMillis() - timer)/(double) 1000)+ " Seconds");
         makeMove(result[1]);
-        System.out.println("value: "+ result[0]);
-        System.out.println("move: " + result[1]);
+        System.out.println("AI Predicted Value: "+ result[0]);
+        System.out.println("AI Move: " + result[1]);
+        System.out.println();
+        boardLocked = false;
+        }
         
     }
 
@@ -112,7 +122,6 @@ public class Main implements MouseListener {
         }
         System.out.println("current value: " + Test.evaluatePosition(board));
         
-        //mask = playerTurn? player.makeMove(mouseCol, mask, ai) : ai.makeMove(mouseCol, mask, player);
 
         if(playerTurn){
             long[] newBoard = Board.makeMove(col, mask, player, ai);
@@ -124,48 +133,43 @@ public class Main implements MouseListener {
             ai = newBoard[1];
             mask = newBoard[0];
         }
-
-        if(Board.checkState(ai, mask) == 1 || Board.checkState(player,mask) == 1){
-            System.out.println("win");
+        try {
+            if(Board.checkState(ai, mask) == 1 || Board.checkState(player,mask) == 1){
+                System.out.println("win");
+                throw new ExitException(ExitException.WIN);
+            }
+            else if (Board.checkState(ai, mask) == 0)
+            {
+                System.out.println("draw");
+                throw new ExitException(ExitException.DRAW);
+            }        
         }
-        else if (Board.checkState(ai, mask) == 0)
-{
-    System.out.println("draw");
-}        
-        //System.out.println(ai);
-        //System.out.println(player);
-        //System.out.println(AI.isTerminal(player));
-        // Board.printBits(mask);
-        // System.out.print("Yellow: ");
-        //Board.printBits(ai);
-        // System.out.print("Red: ");
-        //Board.printBits(player);
-        // System.out.println();
+        catch (ExitException exit){
+            game.paintImmediately(game.getBounds());
+                game.removeMouseListener(this);
+                Object[] options = {"Continue", "Exit", "New Game"};
+                
+                if(exit.getExitCode() == ExitException.WIN){
+                    
+                    int n = JOptionPane.showOptionDialog(null, (playerTurn? "Player" : "AI") + " WINS", "Exit Condition Met", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]); 
+                    //System.out.println(n);
+                    if(n == 1){//exit
+                        System.exit(0);
+                    }
+                    else if (n == 2){
+                        Main.main(new String[]{});
+                    }
+                }
+                else {
+                    int n = JOptionPane.showOptionDialog(null, "DRAW", "Exit Condition Met", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]); 
+                    if(n == 1){//exit
+                        System.exit(0);
+                    }
+                }
+        }
+        
         game.paintImmediately(game.getBounds());
         
-        // catch(ExitException exit){
-        //     game.paintImmediately(game.getBounds());
-        //     game.removeMouseListener(this);
-        //     Object[] options = {"Continue", "Exit", "New Game"};
-            
-        //     if(exit.getExitCode() == ExitException.WIN){
-                
-        //         int n = JOptionPane.showOptionDialog(null, (playerTurn? "Player" : "AI") + " WINS", "Exit Condition Met", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]); 
-        //         //System.out.println(n);
-        //         if(n == 1){//exit
-        //             System.exit(0);
-        //         }
-        //         else if (n == 2){
-        //             Main.main(new String[]{});
-        //         }
-        //     }
-        //     else {
-        //         int n = JOptionPane.showOptionDialog(null, "DRAW", "Exit Condition Met", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]); 
-        //         if(n == 1){//exit
-        //             System.exit(0);
-        //         }
-        //     }
-        // }
         
         
     }
