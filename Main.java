@@ -11,6 +11,7 @@ import java.awt.Color;
 public class Main implements MouseListener {
     private static final int WIDTH = 700;
     private static final int HEIGHT = 600;
+    private static final boolean aiActive = true;
     public static final int RADIUS = WIDTH/7;
     private static final int DEPTH = 10;
     private int mouseX;
@@ -23,6 +24,7 @@ public class Main implements MouseListener {
     private boolean playerTurn = false;
     private long timer = 0;
     private boolean boardLocked = false;
+    
     
     
     
@@ -91,7 +93,8 @@ public class Main implements MouseListener {
         //System.out.println(mouseCol);
         if(Board.canPlay(mouseCol, mask)){
         makeMove(mouseCol);
-        System.out.println("Searching at depth: " + DEPTH + "...");
+        if(aiActive){
+        System.out.println("Calculating...");
         timer = System.currentTimeMillis();
         AI.startTime = timer;
         int[] result = AI.minimax(ai, player,Integer.MIN_VALUE, Integer.MAX_VALUE, mask, DEPTH, true);
@@ -99,6 +102,10 @@ public class Main implements MouseListener {
         makeMove(result[1]);
         System.out.println("AI Predicted Value: "+ result[0]);
         System.out.println("AI Move: " + result[1]);
+        }
+        System.out.println(mask);
+        
+        
         System.out.println();
         }
         boardLocked = false;

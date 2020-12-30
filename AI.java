@@ -21,6 +21,7 @@ public class AI {
                 return new int[] {evalBoard(Long.toBinaryString(aiPos), Long.toBinaryString(playerPos)), 0};
                 }
                 else {
+                    
                     return minimax(aiPos, playerPos, alpha, beta, mask, 1, maximizingPlayer);
                 }
             }
