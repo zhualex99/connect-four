@@ -122,7 +122,7 @@ public class Main implements MouseListener {
                 break;
             }
         }
-        System.out.println("current value: " + Test.evaluatePosition(board));
+        System.out.println("current value: " + InstanPosEval.evaluatePosition(board));
         
 
         if(playerTurn){
