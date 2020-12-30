@@ -1,7 +1,8 @@
 
 public class AI {
     private static int[][] board = new int[7][7];
-    public static int[] minimax (long aiPos,long playerPos, long mask, int depth, boolean maximizingPlayer){
+    private static final int[] COLCHECKS = {3, 4, 2, 5, 1, 6, 0};
+    public static int[] minimax (long aiPos,long playerPos, int alpha, int beta, long mask, int depth, boolean maximizingPlayer){
         int terminalAI = isTerminal(aiPos);
         int terminalPlayer = isTerminal(playerPos);
         if (depth == 0 || terminalAI!=-1 || terminalPlayer!=-1){
@@ -20,13 +21,17 @@ public class AI {
         if(maximizingPlayer){
             int value = Integer.MIN_VALUE;
             int column = 0;
-            for(int i = 0; i < 7; i++){
+            for(int i : COLCHECKS){
                 if(Board.canPlay(i, mask)){
                 long[] newAIBoard = Board.makeMove(i, mask, aiPos, playerPos);
-                int newScore = minimax(newAIBoard[1], playerPos, newAIBoard[0], depth-1, false)[0];
+                int newScore = minimax(newAIBoard[1], playerPos, alpha, beta, newAIBoard[0], depth-1, false)[0];
                 if(newScore>value){
                     value = newScore;
                     column = i;
+                }
+                alpha = Math.max(alpha, value);
+                if (alpha >= beta){
+                    break;
                 }
             }
             }
@@ -35,13 +40,17 @@ public class AI {
         else {
             int value = Integer.MAX_VALUE;
             int column = 0;
-            for(int i = 0; i < 7; i++){
+            for(int i : COLCHECKS){
                 if(Board.canPlay(i, mask)){
                 long[] newPlayerBoard = Board.makeMove(i, mask, playerPos, aiPos);
-                int newScore = minimax(aiPos, newPlayerBoard[1], newPlayerBoard[0], depth-1, true)[0];
+                int newScore = minimax(aiPos, newPlayerBoard[1], alpha, beta, newPlayerBoard[0], depth-1, true)[0];
                 if(newScore<value){
                     value = newScore;
                     column = i;
+                }
+                beta = Math.min (beta, value);
+                if(beta<= alpha){
+                    break;
                 }
             }
             }
@@ -73,6 +82,7 @@ public class AI {
         }
         int value =  Test.evaluatePosition(board);
         board = new int[7][7];
+        
         return value;
     }
 }

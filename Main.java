@@ -85,7 +85,7 @@ public class Main implements MouseListener {
         mouseCol = (int)Math.floor((double)mouseX/((double)WIDTH/7));
         //System.out.println(mouseCol);
         makeMove(mouseCol);
-        int[] result = AI.minimax(ai, player, mask, 8, true);
+        int[] result = AI.minimax(ai, player,Integer.MIN_VALUE, Integer.MAX_VALUE, mask, 10, true);
         
         makeMove(result[1]);
         System.out.println("value: "+ result[0]);
