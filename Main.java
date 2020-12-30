@@ -89,6 +89,7 @@ public class Main implements MouseListener {
         mouseX = e.getX();
         mouseCol = (int)Math.floor((double)mouseX/((double)WIDTH/7));
         //System.out.println(mouseCol);
+        if(Board.canPlay(mouseCol, mask)){
         makeMove(mouseCol);
         System.out.println("Searching at depth: " + DEPTH + "...");
         timer = System.currentTimeMillis();
@@ -98,6 +99,7 @@ public class Main implements MouseListener {
         System.out.println("AI Predicted Value: "+ result[0]);
         System.out.println("AI Move: " + result[1]);
         System.out.println();
+        }
         boardLocked = false;
         }
         
