@@ -107,6 +107,8 @@ public class Board {
         if ((m & (m >> 2))>0){
             return 1;
         }
+
+        
         
         return -1;
         
