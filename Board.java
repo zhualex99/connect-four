@@ -47,7 +47,7 @@ public class Board {
         
         long newMask =  mask | (long)(mask + (Math.pow(2,(col*7))));
         long newPos = opp^newMask;
-        int result = checkState(pos);
+        //int result = checkState(pos);
         //System.out.println("Result" + result);
         
         
@@ -84,7 +84,7 @@ public class Board {
     /**
      * checks if there is a result on the board
      */
-    public static int checkState(long pos){
+    public static int checkState(long pos, long mask){
         //TODO: add draw case
         long m = pos & (pos >> 7);
         //System.out.println("Here" + (m& (m >> 14)));
@@ -106,6 +106,10 @@ public class Board {
         m = pos & (pos >> 1);
         if ((m & (m >> 2))>0){
             return 1;
+        }
+
+        if(mask == 140737488355327L){
+            return 0;
         }
 
         

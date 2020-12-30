@@ -3,14 +3,17 @@ public class AI {
     private static int[][] board = new int[7][7];
     private static final int[] COLCHECKS = {3, 4, 2, 5, 1, 6, 0};
     public static int[] minimax (long aiPos,long playerPos, int alpha, int beta, long mask, int depth, boolean maximizingPlayer){
-        int terminalAI = isTerminal(aiPos);
-        int terminalPlayer = isTerminal(playerPos);
+        int terminalAI = isTerminal(aiPos, mask);
+        int terminalPlayer = isTerminal(playerPos, mask);
         if (depth == 0 || terminalAI!=-1 || terminalPlayer!=-1){
             if (terminalAI==1){
                 return new int[] {Integer.MAX_VALUE-(42-depth), 0};
             }
             else if (terminalPlayer==1){
                 return new int[] {Integer.MIN_VALUE+(42-depth), 0};
+            }
+            else if (terminalAI == 0){
+                return new int[] {0, 0};
             }
             else{
                 return new int[] {evalBoard(Long.toBinaryString(aiPos), Long.toBinaryString(playerPos)), 0};
@@ -58,8 +61,8 @@ public class AI {
         }
     }
 
-    public static int isTerminal(long pos){
-        return Board.checkState(pos);
+    public static int isTerminal(long pos, long mask){
+        return Board.checkState(pos, mask);
     }
 
 

@@ -125,10 +125,13 @@ public class Main implements MouseListener {
             mask = newBoard[0];
         }
 
-        if(Board.checkState(ai) == 1 || Board.checkState(player) == 1){
+        if(Board.checkState(ai, mask) == 1 || Board.checkState(player,mask) == 1){
             System.out.println("win");
         }
-        
+        else if (Board.checkState(ai, mask) == 0)
+{
+    System.out.println("draw");
+}        
         //System.out.println(ai);
         //System.out.println(player);
         //System.out.println(AI.isTerminal(player));
