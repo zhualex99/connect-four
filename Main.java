@@ -110,6 +110,7 @@ public class Main implements MouseListener {
                 break;
             }
         }
+        System.out.println("current value: " + Test.evaluatePosition(board));
         
         //mask = playerTurn? player.makeMove(mouseCol, mask, ai) : ai.makeMove(mouseCol, mask, player);
 
