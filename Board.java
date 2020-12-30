@@ -40,22 +40,20 @@ public class Board {
      * @return      the new mask
      * @throws ExitException    thrown when a result has been achieved (win/loss/draw)
      */
-    public static long[] makeMove(int col, long mask,long pos, long opp) throws ExitException{
+    public static long[] makeMove(int col, long mask,long pos, long opp) {
         //System.out.println(Long.toBinaryString(mask));
         //opp.setBoard(pos^mask);
         
         
         long newMask =  mask | (long)(mask + (Math.pow(2,(col*7))));
-        pos = opp^newMask;
+        long newPos = opp^newMask;
         int result = checkState(pos);
-        //System.out.println(canPlay(col, mask));
+        //System.out.println("Result" + result);
         
-        if (result >=0){
-            throw new ExitException(result);
-        }
+        
     
     
-        return new long[] {newMask, pos};
+        return new long[] {newMask, newPos};
     } 
     /**
      * Returns true if the space in unoccupied by an existing piece and returns false if the space on the board is already occupied.

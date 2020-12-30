@@ -1,49 +1,78 @@
+
 public class AI {
-    public static int minimax (long aiPos,long playerPos, long mask, int depth, boolean maximizingPlayer){
-        int value=0;
-        if(depth == 0 || Board.checkState(aiPos) !=-1 || Board.checkState(playerPos)!=-1){ // if result is on board or leaf node
-            
-            if(depth == 0){
-                value = 0;//return valuation function call
+    private static int[][] board = new int[7][7];
+    public static int[] minimax (long aiPos,long playerPos, long mask, int depth, boolean maximizingPlayer){
+        int terminalAI = isTerminal(aiPos);
+        int terminalPlayer = isTerminal(playerPos);
+        if (depth == 0 || terminalAI!=-1 || terminalPlayer!=-1){
+            if (terminalAI==1){
+                return new int[] {Integer.MAX_VALUE-(42-depth), 0};
             }
-            else if (Board.checkState(aiPos)==1){
-                value = 1000000;
+            else if (terminalPlayer==1){
+                return new int[] {Integer.MIN_VALUE+(42-depth), 0};
             }
-            else if (Board.checkState(playerPos)==1){
-                value = -10000000;
+            else{
+                return new int[] {evalBoard(Long.toBinaryString(aiPos), Long.toBinaryString(playerPos)), 0};
+                
             }
-            
         }
-        else if (maximizingPlayer){
-            value = -Integer.MAX_VALUE;
-            for(int i = 0; i<7;i++){
+
+        if(maximizingPlayer){
+            int value = Integer.MIN_VALUE;
+            int column = 0;
+            for(int i = 0; i < 7; i++){
                 if(Board.canPlay(i, mask)){
-                    try{
-                    long newMask = aiPos.makeMove(i, mask, playerPos);
-                    value = Math.max(value,minimax(aiPos, playerPos, newMask, depth-1, false));
-                    }
-                    catch(ExitException exit){
-                        return Integer.MAX_VALUE*exit.getExitCode();
-                    }
-                    
+                long[] newAIBoard = Board.makeMove(i, mask, aiPos, playerPos);
+                int newScore = minimax(newAIBoard[1], playerPos, newAIBoard[0], depth-1, false)[0];
+                if(newScore>value){
+                    value = newScore;
+                    column = i;
                 }
             }
+            }
+            return new int[] {value, column};
         }
-        else{
-            value = Integer.MAX_VALUE;
-            for(int i = 0; i<7;i++){
+        else {
+            int value = Integer.MAX_VALUE;
+            int column = 0;
+            for(int i = 0; i < 7; i++){
                 if(Board.canPlay(i, mask)){
-                    try{
-                    long newMask = playerPos.makeMove(i, mask, playerPos);
-                    value = Math.min(value,minimax(aiPos, playerPos, newMask, depth-1, true));
-                    }
-                    catch(ExitException exit){
-                        return Integer.MAX_VALUE*exit.getExitCode();
-                    }
-                    
+                long[] newPlayerBoard = Board.makeMove(i, mask, playerPos, aiPos);
+                int newScore = minimax(aiPos, newPlayerBoard[1], newPlayerBoard[0], depth-1, true)[0];
+                if(newScore<value){
+                    value = newScore;
+                    column = i;
                 }
             }
+            }
+            return new int[] {value, column};
         }
+    }
+
+    public static int isTerminal(long pos){
+        return Board.checkState(pos);
+    }
+
+
+    public static int evalBoard(String playerPos, String aiPos){
+        
+        for(int i = 0; i < 7; i++){
+            for (int j = 0; j < 7; j++){
+                if(((i*7)+j)<playerPos.length()){
+                    board[j][i] += playerPos.charAt (playerPos.length()-((i*7)+j)-1)=='1'? 1 : 0;
+                }
+
+                if(((i*7)+j)<aiPos.length()){
+                    board[j][i] += aiPos.charAt (aiPos.length()-((i*7)+j)-1)=='1'? 1 : 0;
+                }
+                
+                
+
+            }
+
+        }
+        int value =  Test.evaluatePosition(board);
+        board = new int[7][7];
         return value;
     }
 }
