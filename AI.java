@@ -2,7 +2,7 @@
 public class AI {
     private static int[][] board = new int[7][7];
     public static long startTime = 0;
-    private static final int[] COLCHECKS = { 3, 4, 2, 5, 1, 6, 0 };
+    private static final int[] COLCHECKS = { 3, 4, 2, 5, 1, 0, 6 };
     private static final int MINTIME = 3000; // minimum time used to search
 
     /**
