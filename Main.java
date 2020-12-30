@@ -10,7 +10,7 @@ import java.awt.Color;
 public class Main implements MouseListener {
     private static final int WIDTH = 700;
     private static final int HEIGHT = 600;
-    private static final boolean aiActive = true; // toggle ai
+    private static final boolean AI_ACTIVE = true; // toggle ai
     public static final int RADIUS = WIDTH / 7;
     private static final int DEPTH = 10; // change min depth (keep this # <= 10)
     private int mouseX;
@@ -83,7 +83,7 @@ public class Main implements MouseListener {
             // System.out.println(mouseCol);
             if (Board.canPlay(mouseCol, mask)) {
                 makeMove(mouseCol);
-                if (aiActive) {
+                if (AI_ACTIVE) {
                     System.out.println("Calculating...");
                     timer = System.currentTimeMillis();
                     AI.startTime = timer;
