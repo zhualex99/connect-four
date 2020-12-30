@@ -108,8 +108,10 @@ public class Board {
             return 1;
         }
 
-        if(mask == 140737488355327L){
+        if(mask == 562949953421311L){
+            System.out.println("draw case");
             return 0;
+            
         }
 
         

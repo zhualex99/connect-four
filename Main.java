@@ -93,6 +93,7 @@ public class Main implements MouseListener {
         makeMove(mouseCol);
         System.out.println("Searching at depth: " + DEPTH + "...");
         timer = System.currentTimeMillis();
+        AI.startTime = timer;
         int[] result = AI.minimax(ai, player,Integer.MIN_VALUE, Integer.MAX_VALUE, mask, DEPTH, true);
         System.out.println ("That took: " + ((System.currentTimeMillis() - timer)/(double) 1000)+ " Seconds");
         makeMove(result[1]);

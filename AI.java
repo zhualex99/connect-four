@@ -1,6 +1,7 @@
 
 public class AI {
     private static int[][] board = new int[7][7];
+    public static long startTime = 0;
     private static final int[] COLCHECKS = {3, 4, 2, 5, 1, 6, 0};
     public static int[] minimax (long aiPos,long playerPos, int alpha, int beta, long mask, int depth, boolean maximizingPlayer){
         int terminalAI = isTerminal(aiPos, mask);
@@ -16,8 +17,12 @@ public class AI {
                 return new int[] {0, 0};
             }
             else{
+                if(System.currentTimeMillis() - startTime > 3000){
                 return new int[] {evalBoard(Long.toBinaryString(aiPos), Long.toBinaryString(playerPos)), 0};
-                
+                }
+                else {
+                    return minimax(aiPos, playerPos, alpha, beta, mask, 1, maximizingPlayer);
+                }
             }
         }
 

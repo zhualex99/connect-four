@@ -1,11 +1,7 @@
 public class Test {
 
 
-    public static void main (String[] args){
-        int[][] board = new int [7][6];
-        
-        System.out.println(Test.evaluatePosition(board));
-    }
+   
 public static int evaluatePosition (int [][] board){
     //using 1's for the ai (+) and 2 for the player (-)
     //check for vertical 3 in a row
