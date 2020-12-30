@@ -82,13 +82,10 @@ public class AI {
                 if(((i*7)+j)<aiPos.length()){
                     board[j][i] += aiPos.charAt (aiPos.length()-((i*7)+j)-1)=='1'? 1 : 0;
                 }
-                
-                
-
             }
 
         }
-        int value =  Test.evaluatePosition(board);
+        int value =  InstanPosEval.evaluatePosition(board);
         board = new int[7][7];
         
         return value;
